@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 
 extern GLchar *VERTEX_SHADER;
+/// PC - Point Cloud
+/// F - Fused
 extern GLchar *FPC_VERTEX_SHADER;
 extern GLchar *FRAGMENT_SHADER;
 
@@ -24,6 +26,10 @@ private:
     GLuint programId_;
 };
 
+/// @brief A struct to represent ShaderData
+///
+/// @param it::Shader the shader object itself
+/// @param MVP_Mat::GLuint the uniform id of the MVP Matrix
 struct ShaderData
 {
     Shader it;

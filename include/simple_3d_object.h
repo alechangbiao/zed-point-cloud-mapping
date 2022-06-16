@@ -5,6 +5,7 @@
 
 #include "shader.h"
 
+/// Generate, update model of the camera and its moving path, and issue draw call.
 class Simple3DObject
 {
 public:
@@ -15,6 +16,8 @@ public:
     void addPoint(float x, float y, float z, float r, float g, float b);
     void addLine(sl::float3 p1, sl::float3 p2, sl::float3 clr);
     void addPoint(sl::float3 position, sl::float3 color);
+    /// Generate & bind vertex array, push data to vertex buffer,
+    /// then link the data to vao by specifing the layout of the data using glVertexAttribPointer
     void pushToGPU();
     void clear();
 

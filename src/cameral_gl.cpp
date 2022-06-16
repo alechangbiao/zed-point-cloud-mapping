@@ -157,7 +157,9 @@ void CameraGL::updateVectors()
 
 void CameraGL::updateView()
 {
+    // camera's model matrix in world space
     sl::Transform transformation(rotation_, (offset_ * rotation_) + position_);
+    // get view matrix by transforms vertices from world space to camera space, or view space.
     view_ = sl::Transform::inverse(transformation);
 }
 

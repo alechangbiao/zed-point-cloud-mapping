@@ -2,6 +2,7 @@
 
 #include <sl/Camera.hpp>
 
+/// CameralGL is mainly for calculating and updating View Projection Matrix
 class CameraGL
 {
 public:
@@ -55,6 +56,16 @@ public:
 
 private:
     void updateVectors();
+
+    /// Update the View Matrix
+    ///
+    /// The inverse of the camera's model matrix is the view matrix, and it transforms vertices from world space to camera space, or view space.
+    ///
+    /// A model matrix <M> is composed from an object's translation transform <T>, rotation transform <R>,and scale transform <S>.
+    /// Multiplying a vertex position <v> by this model matrix transforms the vector into world space.
+    ///
+    ///         M = T⋅R⋅S
+    ///         v_world = M ⋅ v_model
     void updateView();
     void updateVPMatrix();
 

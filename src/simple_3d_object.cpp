@@ -77,7 +77,7 @@ void Simple3DObject::pushToGPU()
         {
             glBindBuffer(GL_ARRAY_BUFFER, vboID_[0]);
             glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(float), &vertices_[0], isStatic_ ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-            glVertexAttribPointer(Shader::ATTRIB_VERTICES_POS, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(Shader::ATTRIB_VERTICES_POS, 3, GL_FLOAT, GL_FALSE, 0, 0); // link buffer to vao
             glEnableVertexAttribArray(Shader::ATTRIB_VERTICES_POS);
         }
 
@@ -85,7 +85,7 @@ void Simple3DObject::pushToGPU()
         {
             glBindBuffer(GL_ARRAY_BUFFER, vboID_[1]);
             glBufferData(GL_ARRAY_BUFFER, colors_.size() * sizeof(float), &colors_[0], isStatic_ ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-            glVertexAttribPointer(Shader::ATTRIB_COLOR_POS, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(Shader::ATTRIB_COLOR_POS, 3, GL_FLOAT, GL_FALSE, 0, 0); // link buffer to vao
             glEnableVertexAttribArray(Shader::ATTRIB_COLOR_POS);
         }
 

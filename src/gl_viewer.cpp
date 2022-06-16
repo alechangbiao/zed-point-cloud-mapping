@@ -247,7 +247,9 @@ void GLViewer::draw()
     glLineWidth(1.f);
     zedPath.draw();
 
-    glUniformMatrix4fv(mainShader.MVP_Mat, 1, GL_FALSE, (sl::Transform::transpose(zedModel.getModelMatrix()) * sl::Transform::transpose(vpMatrix)).m);
+    glUniformMatrix4fv(
+        mainShader.MVP_Mat, 1, GL_FALSE,
+        (sl::Transform::transpose(zedModel.getModelMatrix()) * sl::Transform::transpose(vpMatrix)).m);
 
     zedModel.draw();
     glUseProgram(0);

@@ -22,9 +22,7 @@ const float MOUSE_DZ_SENSITIVITY = 1.25f;
 const float MOUSE_T_SENSITIVITY = 80.f;
 const float KEY_T_SENSITIVITY = 0.1f;
 
-/**
- * @brief This class manages input events, window and Opengl rendering pipeline
- */
+/// This class manages input events, window and Opengl rendering pipeline
 class GLViewer
 {
 public:
@@ -32,9 +30,12 @@ public:
     ~GLViewer();
     bool isAvailable();
 
-    GLenum init(int argc, char **argv, sl::CameraParameters param, sl::FusedPointCloud *ptr, sl::MODEL zed_model);
+    GLenum init(int argc, char **argv, sl::CameraParameters param,
+                sl::FusedPointCloud *ptr, sl::MODEL zed_model);
     void updatePose(sl::Pose pose_, sl::POSITIONAL_TRACKING_STATE tracking_state);
 
+    /// Set GLViewer::new_chunks (private) to true
+    /// Set GLViewer::chunks_pushed (private) to false
     void updateChunks()
     {
         new_chunks = true;
@@ -51,8 +52,14 @@ public:
 private:
     // Rendering loop method called each frame by glutDisplayFunc
     void render();
-    // Everything that needs to be updated before rendering must be done in this method
+
+    /// Update everything before rendering
+    ///
+    /// which includes:
+    /// - camera's projection & view matrix
+    /// - newly produced verticies of camera path and point cloud
     void update();
+
     // Once everything is updated, every renderable objects must be drawn in this method
     void draw();
     // Clear and refresh inputs' data
