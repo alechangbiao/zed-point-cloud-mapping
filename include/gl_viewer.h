@@ -94,8 +94,8 @@ private:
         FREE = 'f'
     };
 
-    Simple3DObject zedModel;
-    Simple3DObject zedPath;
+    Simple3DObject zedModel_;
+    Simple3DObject zedPath_;
     std::vector<sl::float3> vecPath;
 
     std::mutex mtx;
@@ -109,7 +109,7 @@ private:
     int previousMouseMotion_[2];
     KEY_STATE keyStates_[256];
     sl::float3 bckgrnd_clr;
-    sl::Pose pose;
+    sl::Pose pose_;
 
     sl::POSITIONAL_TRACKING_STATE tracking_state;
 

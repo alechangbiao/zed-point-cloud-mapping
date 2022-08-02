@@ -64,6 +64,11 @@
     "thread": "cpp",
     "cfenv": "cpp",
     "cinttypes": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "hash_map": "cpp",
+    "hash_set": "cpp",
+    "bit": "cpp",
+    "unordered_set": "cpp",
+    "*.inc": "cpp"
   }
 }

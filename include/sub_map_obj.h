@@ -11,7 +11,7 @@ class SubMapObj
     GLuint vboID_[2];
 
     /// represent the current count of fused point cloud chunk
-    int current_fc;
+    int current_fpc_count_;
 
     std::vector<sl::uint1> index;
 

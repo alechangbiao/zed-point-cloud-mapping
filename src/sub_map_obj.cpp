@@ -2,13 +2,13 @@
 
 SubMapObj::SubMapObj()
 {
-    current_fc = 0;
+    current_fpc_count_ = 0;
     vaoID_ = 0;
 }
 
 SubMapObj::~SubMapObj()
 {
-    current_fc = 0;
+    current_fpc_count_ = 0;
     if (vaoID_)
     {
         glDeleteBuffers(2, vboID_);
@@ -40,7 +40,7 @@ void SubMapObj::update(sl::PointCloudChunk &chunk)
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID_[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(sl::uint1), &index[0], GL_DYNAMIC_DRAW);
-    current_fc = (int)index.size();
+    current_fpc_count_ = (int)index.size();
 
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -49,10 +49,10 @@ void SubMapObj::update(sl::PointCloudChunk &chunk)
 
 void SubMapObj::draw()
 {
-    if (current_fc && vaoID_)
+    if (current_fpc_count_ && vaoID_)
     {
         glBindVertexArray(vaoID_);
-        glDrawElements(GL_POINTS, (GLsizei)current_fc, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_POINTS, (GLsizei)current_fpc_count_, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 }

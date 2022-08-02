@@ -124,7 +124,7 @@ int main(int argc, char **argv)
                 auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - ts_last).count();
 
                 // Ask for a fused point cloud update if 500ms have elapsed since last request
-                if ((duration > 500) && viewer.chunksUpdated())
+                if ((duration > 30) && viewer.chunksUpdated())
                 {
                     // Ask for a point cloud refresh
                     zed.requestSpatialMapAsync();
@@ -135,6 +135,7 @@ int main(int argc, char **argv)
                 if (zed.getSpatialMapRequestStatusAsync() == sl::ERROR_CODE::SUCCESS)
                 {
                     zed.retrieveSpatialMapAsync(map);
+                    // std::cout << "Chunk Size: " << map.chunks.size() << std::endl;
                     viewer.updateChunks();
                 }
             }

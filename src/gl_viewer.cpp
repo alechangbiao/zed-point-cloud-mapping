@@ -45,9 +45,9 @@ bool GLViewer::isAvailable()
 }
 
 GLenum GLViewer::init(int argc, char **argv,
-                      sl::CameraParameters param, sl::FusedPointCloud *ptr, sl::MODEL zed_model)
+                      sl::CameraParameters param,
+                      sl::FusedPointCloud *ptr, sl::MODEL zed_model)
 {
-
     glutInit(&argc, argv);
     int wnd_w = glutGet(GLUT_SCREEN_WIDTH);
     int wnd_h = glutGet(GLUT_SCREEN_HEIGHT) * 0.9;
@@ -84,8 +84,8 @@ GLenum GLViewer::init(int argc, char **argv,
     bckgrnd_clr = sl::float3(37, 42, 44);
     bckgrnd_clr /= 255.f;
 
-    zedPath.setDrawingType(GL_LINE_STRIP);
-    zedModel.setDrawingType(GL_TRIANGLES);
+    zedPath_.setDrawingType(GL_LINE_STRIP);
+    zedModel_.setDrawingType(GL_TRIANGLES);
     Model3D *model;
     switch (zed_model)
     {
@@ -100,10 +100,10 @@ GLenum GLViewer::init(int argc, char **argv,
         break;
     }
     for (auto it : model->part)
-        fillZED(it.nb_triangles, model->vertices, it.triangles, it.color, &zedModel);
+        fillZED(it.nb_triangles, model->vertices, it.triangles, it.color, &zedModel_);
     delete model;
 
-    zedModel.pushToGPU();
+    zedModel_.pushToGPU();
     updateZEDposition = false;
 
     // Map glut function on this class methods
@@ -207,8 +207,8 @@ void GLViewer::update()
     {
         sl::float3 clr(0.1f, 0.5f, 0.9f);
         for (auto it : vecPath)
-            zedPath.addPoint(it, clr);
-        zedPath.pushToGPU();
+            zedPath_.addPoint(it, clr);
+        zedPath_.pushToGPU();
         vecPath.clear();
         updateZEDposition = false;
     }
@@ -216,17 +216,27 @@ void GLViewer::update()
     if (new_chunks)
     {
         const int nb_c = p_fpc->chunks.size();
-        if (nb_c > sub_maps.size())
+        const int maps_c = sub_maps.size();
+        printf("\n");
+        std::cout << "p_fpc->chunks.size() -> " << nb_c << std::endl;
+        std::cout << "sub_maps.size() -> " << maps_c << std::endl;
+        if (nb_c > maps_c)
         {
             const float step = 500.f;
             size_t new_size = ((nb_c / step) + 1) * step;
             sub_maps.resize(new_size);
+            std::cout << "sub_maps.new_size() -> " << new_size << std::endl;
         }
         int c = 0;
         for (auto &it : sub_maps)
         {
             if ((c < nb_c) && p_fpc->chunks[c].has_been_updated)
+            {
+                // std::cout << "c: " << c << std::endl;
                 it.update(p_fpc->chunks[c]);
+                // std::cout << "p_fpc->chunks[c].vertices.size() -> " << p_fpc->chunks[c].vertices.size() << std::endl;
+            }
+
             c++;
         }
 
@@ -245,13 +255,13 @@ void GLViewer::draw()
     glUniformMatrix4fv(mainShader.MVP_Mat, 1, GL_TRUE, vpMatrix.m);
 
     glLineWidth(1.f);
-    zedPath.draw();
+    zedPath_.draw();
 
     glUniformMatrix4fv(
         mainShader.MVP_Mat, 1, GL_FALSE,
-        (sl::Transform::transpose(zedModel.getModelMatrix()) * sl::Transform::transpose(vpMatrix)).m);
+        (sl::Transform::transpose(zedModel_.getModelMatrix()) * sl::Transform::transpose(vpMatrix)).m);
 
-    zedModel.draw();
+    zedModel_.draw();
     glUseProgram(0);
 
     if (sub_maps.size())
@@ -362,19 +372,19 @@ void GLViewer::idle()
     glutPostRedisplay();
 }
 
-void GLViewer::updatePose(sl::Pose pose_, sl::POSITIONAL_TRACKING_STATE state)
+void GLViewer::updatePose(sl::Pose pose, sl::POSITIONAL_TRACKING_STATE state)
 {
     mtx.lock();
-    pose = pose_;
+    pose_ = pose;
     tracking_state = state;
-    vecPath.push_back(pose.getTranslation());
-    zedModel.setRT(pose.pose_data);
+    vecPath.push_back(pose_.getTranslation());
+    zedModel_.setRT(pose_.pose_data);
     updateZEDposition = true;
     mtx.unlock();
     if (followCamera)
     {
-        camera_.setPosition(pose.getTranslation());
-        sl::Rotation rot = pose.getRotationMatrix();
+        camera_.setPosition(pose_.getTranslation());
+        sl::Rotation rot = pose_.getRotationMatrix();
         camera_.setRotation(rot);
     }
 }
